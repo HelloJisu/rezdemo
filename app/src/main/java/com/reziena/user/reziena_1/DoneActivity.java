@@ -97,8 +97,8 @@ public class DoneActivity extends AppCompatActivity implements View.OnClickListe
         getWindow().getAttributes().height = height;
 
         Intent subintent = getIntent();
-
-        stringlist = subintent.getExtras().getString("stringlist");
+        stringlist = subintent.getStringExtra("stringlist");
+        Log.e("아늬 싀이바", stringlist);
 
         positive = findViewById(R.id.positive);
         non_positive = findViewById(R.id.non_positive);
@@ -112,11 +112,6 @@ public class DoneActivity extends AppCompatActivity implements View.OnClickListe
         cheekrightdata = databaseReference.child("result").child("cheekrightstring");
 
         oppositTxT = findViewById(R.id.oppositTxT);
-
-        Log.e("underright", String.valueOf(underrightstring));
-        Log.e("underleft", String.valueOf(underleftstring));
-        Log.e("cheekrightt", String.valueOf(cheekrightstring));
-        Log.e("cheekleft", String.valueOf(cheekleftstring));
 
         cheekrightdata.addValueEventListener(new ValueEventListener() {
             @Override
@@ -257,7 +252,6 @@ public class DoneActivity extends AppCompatActivity implements View.OnClickListe
                         finish();
                     }
                 }
-                finish();
                 break;
             case R.id.non_positive:
                 Log.e("onclick", "non_positive");
@@ -297,68 +291,79 @@ public class DoneActivity extends AppCompatActivity implements View.OnClickListe
 
             Log.e("treat1-", "onPostExecute - " + getResult);
 
-            if (getResult==null) {}
-            else if (getResult.contains("No_results")) {}
-            else {
+            if (getResult == null) {
+            } else if (getResult.contains("No_results")) {
+            } else {
                 setResult(getResult);
-                // underleft
-                if (stringlist.equals("underleft")) {
-                    if (!uneye_r) {
-                        // uneye_r을 안했으면
-                        Log.e("현재: under_left", "근데 너 uneye_r안햇어"+String.valueOf(uneye_r));
-                        oppositTxT.setText("opposit");
-                        non_positive.setText("no");
-                        positive.setText("Treat_right");
-                    } else {
-                        // 했으면
-                        Log.e("현재: under_left", "근데 너 uneye_r햇어"+String.valueOf(uneye_r));
-                        oppositTxT.setText("finish");
-                        non_positive.setText("------");
-                        positive.setText("go home");
-                    }
+            }
+            // underleft
+            if (stringlist.equals("underleft")) {
+                Log.e("stringlist==underleft", "uneye_r?" + String.valueOf(uneye_r));
+                if (!uneye_r) {
+                    // uneye_r을 안했으면
+                    Log.e("현재: under_left", "근데 너 uneye_r안햇어" + String.valueOf(uneye_r));
+                    oppositTxT.setText("opposit");
+                    non_positive.setText("no");
+                    positive.setText("Treat_right");
+                } else {
+                    // 했으면
+                    Log.e("현재: under_left", "근데 너 uneye_r햇어" + String.valueOf(uneye_r));
+                    oppositTxT.setText("finish");
+                    non_positive.setText("------");
+                    positive.setText("go home");
                 }
-                // underright
-                if (stringlist.equals("underright")) {
-                    if (!uneye_l) {
-                        // uneye_l을 안했으면
-                        Log.e("현재: under_right", "근데 너 uneye_l안햇어"+String.valueOf(uneye_l));
-                        oppositTxT.setText("opposit");
-                        non_positive.setText("no");
-                        positive.setText("Treat_left");
-                    } else {
-                        // 했으면
-                        Log.e("현재: under_right", "근데 너 uneye_l햇어"+String.valueOf(uneye_l));
-                        oppositTxT.setText("finish");
-                        non_positive.setText("------");
-                        positive.setText("go home");
-                    }
+            }
+            // underright
+            if (stringlist.equals("underright")) {
+                Log.e("stringlist==underright", "uneye_l?" + String.valueOf(uneye_l));
+                if (!uneye_l) {
+                    // uneye_l을 안했으면
+                    Log.e("현재: under_right", "근데 너 uneye_l안햇어" + String.valueOf(uneye_l));
+                    oppositTxT.setText("opposit");
+                    non_positive.setText("no");
+                    positive.setText("Treat_left");
+                } else {
+                    // 했으면
+                    Log.e("현재: under_right", "근데 너 uneye_l햇어" + String.valueOf(uneye_l));
+                    oppositTxT.setText("finish");
+                    non_positive.setText("------");
+                    positive.setText("go home");
                 }
-                // cheekl
-                if (stringlist.equals("cheekleft")) {
-                    if (!cheek_r) {
-                        // cheek_r을 안했으면
-                        oppositTxT.setText("opposit");
-                        non_positive.setText("no");
-                        positive.setText("Treat_left");
-                    } else {
-                        // 했으면
-                        oppositTxT.setText("finish");
-                        non_positive.setText("------");
-                        positive.setText("go home");
-                    }
+            }
+            // cheekl
+            if (stringlist.equals("cheekleft")) {
+                Log.e("stringlist==cheekleft", "cheek_r?" + String.valueOf(cheek_r));
+                if (!cheek_r) {
+                    // uneye_r을 안했으면
+                    Log.e("현재: cheek_left", "근데 너 cheek_r안햇어" + String.valueOf(cheek_r));
+                    oppositTxT.setText("opposit");
+                    non_positive.setText("no");
+                    positive.setText("Treat_right");
+                } else {
+                    // 했으면
+                    Log.e("현재: cheek_left", "근데 너 cheek_r햇어" + String.valueOf(cheek_r));
+                    oppositTxT.setText("finish");
+                    non_positive.setText("------");
+                    positive.setText("go home");
                 }
-                // cheekr
-                if (stringlist.equals("cheekright")) {
-                    if (!cheek_l) {
-                        // cheek_l을 안했으면
-                        oppositTxT.setText("opposit");
-                    } else {
-                        // 했으면
-                        oppositTxT.setText("finish");
-                        non_positive.setText("------");
-                        positive.setText("go home");
-                    }
+            }
+            // cheekr
+            if (stringlist.equals("cheekright")) {
+                Log.e("stringlist==cheekright", "cheek_r?" + String.valueOf(cheek_l));
+                if (!cheek_l) {
+                    // uneye_l을 안했으면
+                    Log.e("현재: cheek_right", "근데 너 cheek_l안햇어" + String.valueOf(cheek_l));
+                    oppositTxT.setText("opposit");
+                    non_positive.setText("no");
+                    positive.setText("Treat_left");
+                } else {
+                    // 했으면
+                    Log.e("현재: cheek_right", "근데 너 cheek_l햇어" + String.valueOf(cheek_l));
+                    oppositTxT.setText("finish");
+                    non_positive.setText("------");
+                    positive.setText("go home");
                 }
+
             }
         }
 

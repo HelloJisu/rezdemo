@@ -272,8 +272,8 @@ public class TreatActivity_cheekleft2 extends AppCompatActivity {
                                 if (! TreatActivity_cheekleft2.this.isFinishing()) {
                                     Intent intent = new Intent(getApplicationContext(),DoneActivity.class);
                                     intent.putExtra("stringlist","cheekleft");
-
                                     startActivity(intent);
+
                                     new Handler().postDelayed(new Runnable()
                                     {
                                         @Override
@@ -346,7 +346,6 @@ public class TreatActivity_cheekleft2 extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
-
     }
 
     class setData extends AsyncTask<String, Void, String> {
@@ -369,7 +368,7 @@ public class TreatActivity_cheekleft2 extends AppCompatActivity {
             SharedPreferences sp_userID = getSharedPreferences("userID", MODE_PRIVATE);
             String userID = sp_userID.getString("userID", "");
             String postParameters = "date="+date+"&id="+userID+"&where="+where;
-            Log.e("sdffghrfhgyughj", "update/"+postParameters);
+            //Log.e("sdffghrfhgyughj", "update/"+postParameters);
 
             try {
                 URL url = new URL(serverURL);

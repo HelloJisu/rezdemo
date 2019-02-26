@@ -78,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
     String deviceName;
     private String mDeviceAddress = "";
     LoginActivity loginActivity = (LoginActivity) LoginActivity.loginactivity;
-
+    Handler mHandler;
     boolean measureWrinkle=false;
 
     BluetoothDevice device;
@@ -209,6 +209,8 @@ public class HomeActivity extends AppCompatActivity {
         wrinkle_down = findViewById(R.id.wrinkle_down);
 
         imageView2 = findViewById(R.id.imageView2);
+
+        mHandler = new Handler();
 
         // check
         //Calendar cal = Calendar.getInstance();
@@ -1125,8 +1127,9 @@ public class HomeActivity extends AppCompatActivity {
 
             String dates[] = date.split("-");
 
-            Log.e("getdata-treat", "getResult==" + getResult);
-            if (getResult.contains("No_results") || getResult == null) {
+            //Log.e("getdata-treat", "getResult==" + getResult);
+            if (getResult==null) {}
+            else if (getResult.contains("No_results")) {
                 Log.e("getdata-treat", "getResult==null");
                 DB_wrinkle = "-";
                 wrinkle_up.setVisibility(View.INVISIBLE);
@@ -1640,6 +1643,14 @@ public class HomeActivity extends AppCompatActivity {
 
             if(BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
                 Log.e(btTag,"Now Action?:: " + action);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // UI 작업 O
+                        Log.e("mHandler", "init");
+                        imageView2.setImageResource(R.drawable.ellipsehomethera_icon);
+                    }
+                });
                 Toast toast = Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_SHORT);
                 toast.show();
                 unregisterReceiver(mBroadcastReceiver3);
