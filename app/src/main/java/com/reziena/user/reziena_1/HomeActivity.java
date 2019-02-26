@@ -212,11 +212,6 @@ public class HomeActivity extends AppCompatActivity {
 
         mHandler = new Handler();
 
-        // check
-        //Calendar cal = Calendar.getInstance();
-        //Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("America/Los_Angeles"));
-        //cal.setTimeZone(time);
-
         // init the Bottom Sheet Behavior
         bottomSheetBehavior = BottomSheetBehavior.from(design_bottom_sheet);
 
@@ -226,7 +221,6 @@ public class HomeActivity extends AppCompatActivity {
         // 시작할 때 DashBoard와 기계 이미지 안보이게 하기
         dashboard.setVisibility(View.INVISIBLE);
         layer1.setVisibility(View.INVISIBLE);
-
 
         // set hideable or not
         bottomSheetBehavior.setHideable(false);
@@ -278,55 +272,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) { }
         });
-
-        switch (DB_moisture){
-            case "A+":
-                moisture_status.setText("Perfect!");
-                break;
-            case "A":
-                moisture_status.setText("Great!");
-                break;
-            case "B+":
-                moisture_status.setText("Good condition!");
-                break;
-            case "B":
-                moisture_status.setText("Let's keep going");
-                break;
-            case "C+":
-                moisture_status.setText("Found balance");
-                break;
-            case "C":
-                moisture_status.setText("Just trust us");
-                break;
-            case "-":
-                moisture_status.setText("Let's start mreasurement");
-                break;
-        }
-
-
-        switch (DB_wrinkle) {
-            case "A+":
-                wrinkle_status.setText("Perfect!");
-                break;
-            case "A":
-                wrinkle_status.setText("Great!");
-                break;
-            case "B+":
-                wrinkle_status.setText("Good condition!");
-                break;
-            case "B":
-                wrinkle_status.setText("Let's keep going");
-                break;
-            case "C+":
-                wrinkle_status.setText("Found balance");
-                break;
-            case "C":
-                wrinkle_status.setText("Just trust us");
-                break;
-            case "-":
-                wrinkle_status.setText("Let's start mreasurement");
-                break;
-        }
 
         // set callback for changes
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -546,19 +491,6 @@ public class HomeActivity extends AppCompatActivity {
 
         if (isFirst) getBondedDevices();
         else imageView2.setImageResource(R.drawable.ellipsehomethera_icon);
-
-        GetData1 task1 = new GetData1();
-        task1.execute("http://"+IP_Address+"/callingMoisture.php", "");
-
-        GetData2 task2 = new GetData2();
-        task2.execute("http://"+IP_Address+"/callingWrinkle.php", "");
-
-        GetData3 task3 = new GetData3();
-        task3.execute("http://"+IP_Address+"/callingSkintype.php", "");
-
-        GetData4 task4 = new GetData4();
-        task4.execute("http://"+IP_Address+"/callingTreathome.php", "");
-
     }
 
     private void checkPermissions() {
@@ -1407,58 +1339,191 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if(moistureresult!=null) {
-            moisture_score.setText(moistureresult);
-            switch (moistureresult) {
-                case "A+":
-                    moisture_status.setText("Perfect!");
-                    break;
-                case "A":
-                    moisture_status.setText("Great!");
-                    break;
-                case "B+":
-                    moisture_status.setText("Good condition!");
-                    break;
-                case "B":
-                    moisture_status.setText("Let's keep going");
-                    break;
-                case "C+":
-                    moisture_status.setText("Found balance");
-                    break;
-                case "C":
-                    moisture_status.setText("Just trust us");
-                    break;
-                case "-":
-                    moisture_status.setText("Let's start mreasurement");
-                    break;
+
+        getDataMois();
+        getDataWrink();
+
+        GetData3 task3 = new GetData3();
+        task3.execute("http://"+IP_Address+"/callingSkintype.php", "");
+
+        GetData4 task4 = new GetData4();
+        task4.execute("http://"+IP_Address+"/callingTreat.php", "");
+    }
+
+    private void getDataMois() {
+        // 원래 모이스처, 현재 모이스처 가져오기
+        SharedPreferences now_moisture = getSharedPreferences("now_m", MODE_PRIVATE);
+        SharedPreferences bef_moisture = getSharedPreferences("bef_m", MODE_PRIVATE);
+        String now_m = now_moisture.getString("now_m", "now_m=none");
+        String bef_m = bef_moisture.getString("bef_m", "bef_m=none");
+        Log.e("now_m", now_m);
+        Log.e("bef_m", bef_m);
+
+        if (now_m.equals("now_m=none")) {
+            now_m = "-";
+            mois_up.setVisibility(View.INVISIBLE);
+            mois_down.setVisibility(View.INVISIBLE);
+        } else if (bef_m.equals("bef_m=none")) {
+            mois_up.setVisibility(View.INVISIBLE);
+            mois_down.setVisibility(View.INVISIBLE);
+        } else { setUpNDown(now_m, bef_m, "moisture"); }
+
+        Log.e("moisture",now_m);
+
+        switch (now_m) {
+            case "100":
+                now_m = "A+"; break;
+            case "95":
+                now_m = "A"; break;
+            case "90":
+                now_m = "B+"; break;
+            case "85":
+                now_m = "B"; break;
+            case "80":
+                now_m = "C+"; break;
+            case "75":
+                now_m = "C"; break;
+        }
+        moisture_score_main.setText(now_m);
+        moisture_score.setText(now_m);
+
+        switch (now_m){
+            case "A+":
+                moisture_status.setText("Perfect!");
+                break;
+            case "A":
+                moisture_status.setText("Great!");
+                break;
+            case "B+":
+                moisture_status.setText("Good condition!");
+                break;
+            case "B":
+                moisture_status.setText("Let's keep going");
+                break;
+            case "c+":
+                moisture_status.setText("Found balance");
+                break;
+            case "C":
+                moisture_status.setText("Just trust us");
+                break;
+            case "-":
+                moisture_status.setText("Let's start mreasurement");
+                break;
+        }
+    }
+
+    private void getDataWrink() {
+        // 원래 모이스처, 현재 모이스처 가져오기
+        SharedPreferences now_wrinkle = getSharedPreferences("now_w", MODE_PRIVATE);
+        SharedPreferences bef_wrinkle = getSharedPreferences("bef_w", MODE_PRIVATE);
+        String now_w = now_wrinkle.getString("now_w", "now_w=none");
+        String bef_w = bef_wrinkle.getString("bef_w", "bef_w=none");
+        Log.e("now_w", now_w);
+        Log.e("bef_w", bef_w);
+
+        if (now_w.equals("now_w=none")) {
+            now_w = "-";
+            wrinkle_up.setVisibility(View.INVISIBLE);
+            wrinkle_down.setVisibility(View.INVISIBLE);
+        } else if (bef_w.equals("bef_w=none")) {
+            wrinkle_up.setVisibility(View.INVISIBLE);
+            wrinkle_down.setVisibility(View.INVISIBLE);
+        } else { setUpNDown(now_w, bef_w, "wrinkle"); }
+
+        Log.e("wrinkle",now_w);
+
+        switch (now_w) {
+            case "100":
+                now_w = "A+"; break;
+            case "95":
+                now_w = "A"; break;
+            case "90":
+                now_w = "B+"; break;
+            case "85":
+                now_w = "B"; break;
+            case "80":
+                now_w = "C+"; break;
+            case "75":
+                now_w = "C"; break;
+        }
+        wrinkle_score_main.setText(now_w);
+        wrinkle_score.setText(now_w);
+
+        switch (now_w){
+            case "A+":
+                wrinkle_status.setText("Perfect!");
+                break;
+            case "A":
+                wrinkle_status.setText("Great!");
+                break;
+            case "B+":
+                wrinkle_status.setText("Good condition!");
+                break;
+            case "B":
+                wrinkle_status.setText("Let's keep going");
+                break;
+            case "c+":
+                wrinkle_status.setText("Found balance");
+                break;
+            case "C":
+                wrinkle_status.setText("Just trust us");
+                break;
+            case "-":
+                wrinkle_status.setText("Let's start mreasurement");
+                break;
+        }
+    }
+
+    private void setUpNDown(String now, String bef, String dbName) {
+        String mois="", wrink="";
+
+        if (Integer.parseInt(bef) < Integer.parseInt(now)) {
+            if (dbName.equals("moisture")) mois = "up";
+            else wrink = "up";
+        }
+        else if (Integer.parseInt(bef) == Integer.parseInt(now)) {
+            if (dbName.equals("moisture")) mois = "else";
+            else wrink = "else";
+        }
+        else {
+            if (dbName.equals("moisture")) mois = "down";
+            else wrink = "down";
+        }
+        setArrow(mois, wrink, dbName);
+
+    }
+
+    private void setArrow(String mois, String wrink, String dbName) {
+        if (dbName.equals("moisture")) {
+            if(mois.equals("up")) {
+                Log.e("setting-moisture", "up");
+                mois_up.setVisibility(View.VISIBLE);
+                mois_down.setVisibility(View.INVISIBLE);
+            } else if(mois.equals("down")) {
+                Log.e("setting-moisture", "down");
+                mois_up.setVisibility(View.INVISIBLE);
+                mois_down.setVisibility(View.VISIBLE);
+            } else {
+                Log.e("setting-moisture", "else");
+                mois_up.setVisibility(View.INVISIBLE);
+                mois_down.setVisibility(View.INVISIBLE);
             }
         }
-        GetData2 task2 = new GetData2();
-        task2.execute("http://"+IP_Address+"/callingWrinkle.php", "");
-            switch (wrinkle_score.getText().toString()) {
-                case "A+":
-                    moisture_status.setText("Perfect!");
-                    break;
-                case "A":
-                    moisture_status.setText("Great!");
-                    break;
-                case "B+":
-                    moisture_status.setText("Good condition!");
-                    break;
-                case "B":
-                    moisture_status.setText("Let's keep going");
-                    break;
-                case "C+":
-                    moisture_status.setText("Found balance");
-                    break;
-                case "C":
-                    moisture_status.setText("Just trust us");
-                    break;
-                case "-":
-                    moisture_status.setText("Let's start mreasurement");
-                    break;
+        else if (dbName.equals("wrinkle")) {
+            if (wrink.equals("up")) {
+                Log.e("setting-wrinkle", "up");
+                wrinkle_up.setVisibility(View.VISIBLE);
+                wrinkle_down.setVisibility(View.INVISIBLE);
+            } else if (wrink.equals("down")) {
+                Log.e("setting-wrinkle", "down");
+                wrinkle_up.setVisibility(View.INVISIBLE);
+                wrinkle_down.setVisibility(View.VISIBLE);
+            } else {
+                Log.e("setting-wrinkle", "else");
+                wrinkle_up.setVisibility(View.INVISIBLE);
+                wrinkle_down.setVisibility(View.INVISIBLE);
             }
-
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -1488,15 +1553,6 @@ public class HomeActivity extends AppCompatActivity {
             finish();
             return;
         }
-
-        if (requestCode == REQUEST_CODE_MOIS) {
-            moistureresult = data.getStringExtra("moisture");
-            SetArrow setTask1 = new SetArrow();
-            setTask1.execute("http://"+IP_Address+"/setArrow.php", "moisture");
-        }
-
-        if(resultCode!=RESULT_OK)
-            return;
 
         switch(requestCode)
         {

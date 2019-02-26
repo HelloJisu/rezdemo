@@ -46,14 +46,33 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.okay:
+                        // 로그아웃
                         SharedPreferences sp_userName = getSharedPreferences("userName", MODE_PRIVATE);
                         SharedPreferences sp_userID = getSharedPreferences("userID", MODE_PRIVATE);
+                        SharedPreferences now_wrinkle = getSharedPreferences("now_w", MODE_PRIVATE);
+                        SharedPreferences bef_wrinkle = getSharedPreferences("bef_w", MODE_PRIVATE);
+                        SharedPreferences now_moisture = getSharedPreferences("now_m", MODE_PRIVATE);
+                        SharedPreferences bef_moisture = getSharedPreferences("bef_m", MODE_PRIVATE);
+
                         SharedPreferences.Editor editor1 = sp_userName.edit();
                         SharedPreferences.Editor editor2 = sp_userID.edit();
+                        SharedPreferences.Editor editor3 = now_wrinkle.edit();
+                        SharedPreferences.Editor editor4 = bef_wrinkle.edit();
+                        SharedPreferences.Editor editor5 = now_moisture.edit();
+                        SharedPreferences.Editor editor6 = bef_moisture.edit();
                         editor1.remove("userName");
                         editor2.remove("userID");
+                        editor3.remove("now_w");
+                        editor4.remove("bef_w");
+                        editor5.remove("now_m");
+                        editor6.remove("bef_m");
+
                         editor1.commit();
                         editor2.commit();
+                        editor3.commit();
+                        editor4.commit();
+                        editor5.commit();
+                        editor6.commit();
                         Log.e("remove", "yeal~!"); //하기실어
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);

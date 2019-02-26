@@ -80,6 +80,24 @@ public class WrinkleResultActivity extends AppCompatActivity {
     setData task = new setData();
     task.execute("http://"+HomeActivity.IP_Address+"/saveWrinkle.php", per);
 
+    String bef_w="";
+    // 원래 모이스처 가져오기
+    SharedPreferences bef_wrinkles = getSharedPreferences("now_w", MODE_PRIVATE);
+    bef_w = bef_wrinkles.getString("now_w", "bef_w=none");
+    Log.e("bef_w", bef_w);
+
+    // 새로운 모이스처 저장하기
+    SharedPreferences now_wrinkle = getSharedPreferences("now_w", MODE_PRIVATE);
+    SharedPreferences bef_wrinkle = getSharedPreferences("bef_w", MODE_PRIVATE);
+    SharedPreferences.Editor editor1 = now_wrinkle.edit();
+    SharedPreferences.Editor editor2 = bef_wrinkle.edit();
+    editor1.putString("now_w", per);
+    editor2.putString("bef_w", bef_w);
+    editor1.commit();
+    editor2.commit();
+    Log.e("bef_w ", bef_w+"퍼센트");
+    Log.e("now_w ", per+"퍼센트");
+
     Log.e("Wrinkle-grade", grade);
 
     home = getIntent();
