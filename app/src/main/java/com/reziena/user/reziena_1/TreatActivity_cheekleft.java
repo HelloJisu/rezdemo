@@ -71,6 +71,8 @@ public class TreatActivity_cheekleft extends AppCompatActivity {
     public static Activity treatactivity;
     ImageView content1, content2;
     public static Activity treatcheekleft;
+    Intent home;
+    int wrinkleresult;
 
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -84,6 +86,7 @@ public class TreatActivity_cheekleft extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_treat_cheekleft);
         treatcheekleft = TreatActivity_cheekleft.this;
+        home = getIntent();
 
         underrightdata = databaseReference.child("result").child("underrightstring");
         underleftdata = databaseReference.child("result").child("underleftstring");
@@ -109,6 +112,9 @@ public class TreatActivity_cheekleft extends AppCompatActivity {
         back=(ImageView)findViewById(R.id.backw_cl);
         content1 = findViewById(R.id.treatup_cl);
         content2 = findViewById(R.id.treatdown_cl);
+
+        wrinkleresult=home.getIntExtra("wrinkle",wrinkleresult);
+
         View.OnClickListener onClickListener = new View.OnClickListener() {
             Intent intent;
 

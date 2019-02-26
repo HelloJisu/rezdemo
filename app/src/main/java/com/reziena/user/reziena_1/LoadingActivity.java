@@ -29,7 +29,8 @@ public class LoadingActivity extends AppCompatActivity {
     LinearLayout content1, content2;
     Bitmap blurBitMap, blurBitMap2;
     LayoutInflater treatunderright,treatunderright2,treatunderleft,treatunderleft2, treatcheekright,treatcheekright2,treatcheekleft,treatcheekleft2;
-
+    Intent home;
+    String wrinkleresult;
     private static Bitmap bitamp;
     private static Bitmap bitamp2;
     TextView loadingtxt;
@@ -79,6 +80,7 @@ public class LoadingActivity extends AppCompatActivity {
                                 break;
                             case 10:
                                 Intent intent = new Intent(getBaseContext(), TreatActivity.class);
+                                intent.putExtra("wrinkle",wrinkleresult);
                                 startActivity(intent);
                                 overridePendingTransition(0, 0);
                                 finish();
@@ -96,6 +98,8 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
         startLoading();
+        home = getIntent();
+        wrinkleresult=home.getStringExtra("wrinkle");
         content1 = findViewById(R.id.treatup);
         content2 = findViewById(R.id.treatdown);
         loadingtxt = (TextView)findViewById(R.id.loadingText);

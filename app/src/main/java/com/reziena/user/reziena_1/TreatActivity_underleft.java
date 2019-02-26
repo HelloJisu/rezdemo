@@ -70,6 +70,8 @@ public class TreatActivity_underleft extends AppCompatActivity {
   public static Activity treatactivity;
   public static Activity treatunderleft;
   ImageView content1, content2;
+  Intent home;
+  int wrinkleresult;
 
 
   private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -83,6 +85,7 @@ public class TreatActivity_underleft extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_treat_underleft);
     treatunderleft=TreatActivity_underleft.this;
+    home = getIntent();
 
     underrightdata = databaseReference.child("result").child("underrightstring");
     underleftdata = databaseReference.child("result").child("underleftstring");
@@ -109,6 +112,7 @@ public class TreatActivity_underleft extends AppCompatActivity {
     back=(ImageView)findViewById(R.id.backw_ul);
     content1 = findViewById(R.id.treatup_ul);
     content2 = findViewById(R.id.treatdown_ul);
+    wrinkleresult=home.getIntExtra("wrinkle",wrinkleresult);
     View.OnClickListener onClickListener = new View.OnClickListener() {
       Intent intent;
 
@@ -275,21 +279,60 @@ public class TreatActivity_underleft extends AppCompatActivity {
         if (wrinkle_string.equals("80")||wrinkle_string.equals("75")) {
           level = 3;
         }
-        if (level == 1) {
-          underleft.setImageResource(R.drawable.underleftlevel1);
-          underright.setImageResource(R.drawable.underrightlevel1);
-          component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 1,\nAND SELECT STARTIG AREA");
-        }
-        if (level == 2) {
-          underleft.setImageResource(R.drawable.underleftlevel2);
-          underright.setImageResource(R.drawable.underrightlevel2);
-          component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 2,\nAND SELECT STARTIG AREA");
-        }
-        if (level == 3) {
-          underleft.setImageResource(R.drawable.underleftlevel3);
-          underright.setImageResource(R.drawable.underrightlevel3);
-          component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 3,\nAND SELECT STARTIG AREA");
-        }
+          if (level == 1) {
+              // underleft
+              if (treatResult.contains("under_l")) {
+                  underleft.setEnabled(false);
+                  underleft.setImageResource(R.drawable.underleftdone);
+              } else {
+                  underleft.setImageResource(R.drawable.underleftlevel1);
+              }
+
+              // underright
+              if (treatResult.contains("under_r")) {
+                  underright.setEnabled(false);
+                  underright.setImageResource(R.drawable.underrightdone);
+              } else {
+                  underright.setImageResource(R.drawable.underrightlevel1);
+              }
+              component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 1,\nAND SELECT STARTIG AREA");
+          }
+          if (level == 2) {
+              if (treatResult.contains("under_l")) {
+                  underleft.setEnabled(false);
+                  underleft.setImageResource(R.drawable.underleftdone);
+              } else {
+                  underleft.setImageResource(R.drawable.underleftlevel2);
+              }
+
+              // underright
+              if (treatResult.contains("under_r")) {
+                  underright.setEnabled(false);
+                  underright.setImageResource(R.drawable.underrightdone);
+              } else {
+                  underright.setImageResource(R.drawable.underrightlevel2);
+              }
+              component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 2,\nAND SELECT STARTIG AREA");
+          } else {
+
+          }
+          if (level == 3) {
+              if (treatResult.contains("under_l")) {
+                  underleft.setEnabled(false);
+                  underleft.setImageResource(R.drawable.underleftdone);
+              } else {
+                  underleft.setImageResource(R.drawable.underleftlevel3);
+              }
+
+              // under_r
+              if (treatResult.contains("under_r")) {
+                  underright.setEnabled(false);
+                  underright.setImageResource(R.drawable.underrightdone);
+              } else {
+                  underright.setImageResource(R.drawable.underrightlevel3);
+              }
+              component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 3,\nAND SELECT STARTIG AREA");
+          }
       }
     }
 

@@ -36,6 +36,7 @@ public class WrinkleResultActivity extends AppCompatActivity {
   String grade, per;
   HomeActivity homeactivity = (HomeActivity)HomeActivity.homeactivity;
   MainActivity mainactivity = (MainActivity) MainActivity.mainnactivity;
+  Intent home;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,9 @@ public class WrinkleResultActivity extends AppCompatActivity {
     task.execute("http://"+HomeActivity.IP_Address+"/saveWrinkle.php", per);
 
     Log.e("Wrinkle-grade", grade);
+
+    home = getIntent();
+    resultData();
 
     result_grade.setText(grade);
     result_per.setText(per +"% of wrinkle \n detected");
@@ -163,5 +167,11 @@ public class WrinkleResultActivity extends AppCompatActivity {
   @Override
   public void onBackPressed() {
     //super.onBackPressed();
+  }
+
+  private void resultData(){
+    Intent intent = new Intent();
+    intent.putExtra("wrinkle",grade);
+    setResult(RESULT_OK,intent);
   }
 }

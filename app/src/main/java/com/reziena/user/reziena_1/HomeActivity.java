@@ -95,6 +95,8 @@ public class HomeActivity extends AppCompatActivity {
     int count;
 
 
+    private final int REQUEST_CODE_MOIS= 100;
+    private final int REQUEST_CODE_WRIN = 200;
     Animation alphaback;
     RenderScript rs, rs2;
     Bitmap blurBitMap, blurBitMap2;
@@ -122,6 +124,7 @@ public class HomeActivity extends AppCompatActivity {
     private int id_view;
     private String absolutePath;
     String wrinklestringg;
+    String moistureresult,wrinkleresult;
 
     TextView home_setName, dash_setName;
 
@@ -359,6 +362,7 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.treatBtn:
                         if (measureWrinkle) {
                             intent = new Intent(getApplicationContext(), LoadingActivity.class);
+                            intent.putExtra("wrinkle",DB_wrinkle);
                             overridePendingTransition(0, 0);
                             startActivity(intent);
                         } else {
@@ -370,7 +374,7 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.moisture:
                         intent = new Intent(getApplicationContext(), MoistureActivity.class);
                         overridePendingTransition(0,0);
-                        startActivity(intent);
+                        startActivityForResult(intent,REQUEST_CODE_MOIS);
                         new Handler().postDelayed(new Runnable()
                         {
                             @Override
@@ -384,7 +388,7 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.wrinkles:
                         intent = new Intent(getApplicationContext(), WrinklesActivity.class);
                         overridePendingTransition(0,0);
-                        startActivity(intent);
+                        startActivityForResult(intent,REQUEST_CODE_WRIN);
                         new Handler().postDelayed(new Runnable()
                         {
                             @Override
@@ -773,10 +777,6 @@ public class HomeActivity extends AppCompatActivity {
                     moisture_status.setText("Let's start mreasurement");
                     break;
             }
-
-            SetArrow setTask1 = new SetArrow();
-            setTask1.execute("http://"+IP_Address+"/setArrow.php", "moisture");
-
         }
 
         @Override
@@ -1404,7 +1404,58 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        // intent받아오는거
+        if(moistureresult!=null) {
+            moisture_score.setText(moistureresult);
+            switch (moistureresult) {
+                case "A+":
+                    moisture_status.setText("Perfect!");
+                    break;
+                case "A":
+                    moisture_status.setText("Great!");
+                    break;
+                case "B+":
+                    moisture_status.setText("Good condition!");
+                    break;
+                case "B":
+                    moisture_status.setText("Let's keep going");
+                    break;
+                case "C+":
+                    moisture_status.setText("Found balance");
+                    break;
+                case "C":
+                    moisture_status.setText("Just trust us");
+                    break;
+                case "-":
+                    moisture_status.setText("Let's start mreasurement");
+                    break;
+            }
+        }
+        GetData2 task2 = new GetData2();
+        task2.execute("http://"+IP_Address+"/callingWrinkle.php", "");
+            switch (wrinkle_score.getText().toString()) {
+                case "A+":
+                    moisture_status.setText("Perfect!");
+                    break;
+                case "A":
+                    moisture_status.setText("Great!");
+                    break;
+                case "B+":
+                    moisture_status.setText("Good condition!");
+                    break;
+                case "B":
+                    moisture_status.setText("Let's keep going");
+                    break;
+                case "C+":
+                    moisture_status.setText("Found balance");
+                    break;
+                case "C":
+                    moisture_status.setText("Just trust us");
+                    break;
+                case "-":
+                    moisture_status.setText("Let's start mreasurement");
+                    break;
+            }
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -1427,13 +1478,18 @@ public class HomeActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-
         super.onActivityResult(requestCode, resultCode, data);
 
         // BT 활성화 아니오 눌렀을 경우 끝
         if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
             finish();
             return;
+        }
+
+        if (requestCode == REQUEST_CODE_MOIS) {
+            moistureresult = data.getStringExtra("moisture");
+            SetArrow setTask1 = new SetArrow();
+            setTask1.execute("http://"+IP_Address+"/setArrow.php", "moisture");
         }
 
         if(resultCode!=RESULT_OK)

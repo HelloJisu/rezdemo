@@ -49,7 +49,9 @@ import java.util.TimerTask;
 public class TreatActivity extends AppCompatActivity {
 
     String treatResult="";
-
+    int wrinkleresult;
+    String wrinkle;
+    Intent home;
     ImageView forehead, underleft, underright, eyeleft, eyeright, cheekl, cheekr, mouth, back;
     LinearLayout component,backbutton;
     TextView component_txt,u_tright_txt1,u_tright_txt2,u_tleft_txt1,u_tleft_txt2,c_tright_txt1,c_tright_txt2,c_tleft_txt1,c_tleft_txt2;
@@ -81,7 +83,7 @@ public class TreatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_treat);
         treatactivity=TreatActivity.this;
-
+        home = getIntent();
         underrightdata = databaseReference.child("result").child("underrightstring");
         underleftdata = databaseReference.child("result").child("underleftstring");
         cheekleftdata = databaseReference.child("result").child("cheekleftstring");
@@ -127,6 +129,23 @@ public class TreatActivity extends AppCompatActivity {
         c_tleft_txt1=(TextView)findViewById(R.id.c_tleft_txt1);c_tleft_txt2=(TextView)findViewById(R.id.c_tleft_txt2);
         backbutton=findViewById(R.id.backbutton);
 
+        wrinkle=home.getStringExtra("wrinkle");
+        switch (wrinkle) {
+            case "A+":
+                wrinkleresult = 100; break;
+            case "A":
+                wrinkleresult = 95; break;
+            case "B+":
+                wrinkleresult = 90; break;
+            case "B":
+                wrinkleresult = 85; break;
+            case "C+":
+                wrinkleresult = 80; break;
+            case "C":
+                wrinkleresult = 75; break;
+        }
+        Log.e("wrinkle",String.valueOf(wrinkleresult));
+
         View.OnClickListener onClickListener = new View.OnClickListener() {
             Intent intent;
 
@@ -139,6 +158,7 @@ public class TreatActivity extends AppCompatActivity {
                         break;
                     case R.id.underright:
                         intent = new Intent(getBaseContext(), TreatActivity_underright.class);
+                        intent.putExtra("wrinkle",wrinkleresult);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
                         finish();
@@ -146,6 +166,7 @@ public class TreatActivity extends AppCompatActivity {
 
                     case R.id.underleft:
                         intent = new Intent(getBaseContext(), TreatActivity_underleft.class);
+                        intent.putExtra("wrinkle",wrinkleresult);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
                         finish();
@@ -153,6 +174,7 @@ public class TreatActivity extends AppCompatActivity {
 
                     case R.id.cheek_right:
                         intent = new Intent(getBaseContext(), TreatActivity_cheekright.class);
+                        intent.putExtra("wrinkle",wrinkleresult);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
                         finish();
@@ -160,6 +182,7 @@ public class TreatActivity extends AppCompatActivity {
 
                     case R.id.cheek_left:
                         intent = new Intent(getBaseContext(), TreatActivity_cheekleft.class);
+                        intent.putExtra("wrinkle",wrinkleresult);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
                         finish();
