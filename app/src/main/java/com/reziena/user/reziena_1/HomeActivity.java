@@ -541,6 +541,18 @@ public class HomeActivity extends AppCompatActivity {
         if (isFirst) getBondedDevices();
         else imageView2.setImageResource(R.drawable.ellipsehomethera_icon);
 
+        GetData1 task1 = new GetData1();
+        task1.execute("http://"+IP_Address+"/callingMoisture.php", "");
+
+        GetData2 task2 = new GetData2();
+        task2.execute("http://"+IP_Address+"/callingWrinkle.php", "");
+
+        GetData3 task3 = new GetData3();
+        task3.execute("http://"+IP_Address+"/callingSkintype.php", "");
+
+        GetData4 task4 = new GetData4();
+        task4.execute("http://"+IP_Address+"/callingTreathome.php", "");
+
     }
 
     private void checkPermissions() {
@@ -1392,18 +1404,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
-        GetData1 task1 = new GetData1();
-        task1.execute("http://"+IP_Address+"/callingMoisture.php", "");
-
-        GetData2 task2 = new GetData2();
-        task2.execute("http://"+IP_Address+"/callingWrinkle.php", "");
-
-        GetData3 task3 = new GetData3();
-        task3.execute("http://"+IP_Address+"/callingSkintype.php", "");
-
-        GetData4 task4 = new GetData4();
-        task4.execute("http://"+IP_Address+"/callingTreathome.php", "");
+        // intent받아오는거
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
