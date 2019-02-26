@@ -1632,7 +1632,7 @@ public class HomeActivity extends AppCompatActivity {
         dashback.startAnimation(alphaback);
     }
 
-    /** Broadcast Receiver for listing devices that are not yet paired. */
+    /** Broadcast Receiver for listing devices that are not yet paired */
     private final BroadcastReceiver mBroadcastReceiver3 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

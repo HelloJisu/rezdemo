@@ -130,23 +130,21 @@ public class TreatActivity extends AppCompatActivity {
         backbutton=findViewById(R.id.backbutton);
 
         wrinkle=home.getStringExtra("wrinkle");
-        if (wrinkle!=null) {
-            switch (wrinkle) {
-                case "A+":
-                    wrinkleresult = 100; break;
-                case "A":
-                    wrinkleresult = 95; break;
-                case "B+":
-                    wrinkleresult = 90; break;
-                case "B":
-                    wrinkleresult = 85; break;
-                case "C+":
-                    wrinkleresult = 80; break;
-                case "C":
-                    wrinkleresult = 75; break;
-            }
-            Log.e("wrinkle",String.valueOf(wrinkleresult));
+        switch (wrinkle) {
+            case "A+":
+                wrinkleresult = 100; break;
+            case "A":
+                wrinkleresult = 95; break;
+            case "B+":
+                wrinkleresult = 90; break;
+            case "B":
+                wrinkleresult = 85; break;
+            case "C+":
+                wrinkleresult = 80; break;
+            case "C":
+                wrinkleresult = 75; break;
         }
+        Log.e("wrinkle",String.valueOf(wrinkleresult));
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             Intent intent;

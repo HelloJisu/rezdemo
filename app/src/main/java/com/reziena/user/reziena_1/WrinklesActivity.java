@@ -52,7 +52,6 @@ public class WrinklesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.ready:
-
                         int permissionCamera = ContextCompat.checkSelfPermission(WrinklesActivity.this, Manifest.permission.CAMERA);
                         if(permissionCamera == PackageManager.PERMISSION_DENIED) {
                             //ActivityCompat.requestPermissions((Activity) WrinklesActivity.this, new String[]{Manifest.permission.CAMERA}, MainActivity.REQUEST_CAMERA);
@@ -87,7 +86,7 @@ public class WrinklesActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        homeactivity.backgroundimg.setImageResource(0);
+        homeactivity.dashback.setImageResource(0);
     }
 
     @Override

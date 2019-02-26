@@ -441,7 +441,7 @@ public class TreatActivity_underright2 extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
-        //count_ur = 0;
+        count_ur = 500;
     }
     public void screenshot(){
         rs = RenderScript.create(this);

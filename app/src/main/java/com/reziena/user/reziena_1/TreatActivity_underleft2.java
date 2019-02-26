@@ -459,7 +459,7 @@ public class TreatActivity_underleft2 extends AppCompatActivity {
 
     public void onStop() {
         super.onStop();
-        //count_ul = 0;
+        count_ul = 500;
     }
 
     public void screenshot(){

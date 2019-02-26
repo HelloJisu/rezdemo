@@ -543,7 +543,7 @@ public class TreatActivity_cheekright2 extends AppCompatActivity {
 
     public void onPause() {
         super.onPause();
-        //count = 0;
+        count = 500;
     }
 
     public void screenshot(){
