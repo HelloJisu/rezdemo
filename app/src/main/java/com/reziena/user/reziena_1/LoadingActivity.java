@@ -123,4 +123,9 @@ public class LoadingActivity extends AppCompatActivity {
         blurBitMap2 = rsBlurProcessor.blur(bitamp2, 20f, 3);
 
     }
+
+    public void onPause() {
+        super.onPause();
+        count = 500;
+    }
 }

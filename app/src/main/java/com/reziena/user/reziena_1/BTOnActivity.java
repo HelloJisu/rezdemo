@@ -164,15 +164,6 @@ public class BTOnActivity extends AppCompatActivity {
     public boolean connectToDevice(String address) {
         device = mBtAdapter.getRemoteDevice(address);
 
-        /** Filtering Broadcast Receiver */
-        IntentFilter filter3 = new IntentFilter();
-        filter3.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
-        filter3.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-        filter3.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
-        filter3.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
-        /** Start Broadcast Receiver */
-        this.registerReceiver(mBroadcastReceiver3, filter3);
-
         if (mBtAdapter == null || address == null) {
             Log.e("BT", "mBtAdapter==null & address==null");
             return false;
@@ -213,9 +204,14 @@ public class BTOnActivity extends AppCompatActivity {
                     //Log.e("action_foundt", HomeActivity.devName);
                     if (device.getName().equals("상아")) {
                         isFound = true;
+                        nowInter=true;
                         Log.e(HomeActivity.devName, "디바이스 찾ㅇa!");
                         //nowInter=true;
                         t.interrupt();
+                        Log.e("t.interrupt:", String.valueOf(t.isInterrupted()));
+                        if (t.isInterrupted()) {
+                            t.stop();
+                        }
                         unregisterReceiver(mBroadcastReceiver1);
                         if (device.getBondState()==BluetoothDevice.BOND_NONE) {
                             Log.e("bondedState?!", String.valueOf(device.getBondState())+"BOND_NONE");
@@ -255,7 +251,6 @@ public class BTOnActivity extends AppCompatActivity {
             Log.e("BT", "onReceive: ACTION____________come in mBroadcastReceiver2");
             Log.e("action", action);
 
-
             device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             if (device.getBondState()==BluetoothDevice.BOND_NONE) {
                 Log.e("BT", "BOND_NONE");
@@ -263,35 +258,6 @@ public class BTOnActivity extends AppCompatActivity {
                 Log.e("bondedState?!", "BOND_BONDED");
                 Log.e("Address", device.getAddress());
                 connectToDevice(device.getAddress());
-            }
-        }
-    };
-
-    private final BroadcastReceiver mBroadcastReceiver3 = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            final String action = intent.getAction();
-            Log.e("broadcasereceiver", "onReceive: ACTION____________come in Receiver3");
-            //Log.e(TAG, "Now Action?::" + action);
-
-            if(BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
-                Log.e("broadcasereceiver","Now Action?:: " + action);
-                unregisterReceiver(mBroadcastReceiver3);
-                Intent intent2 = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(intent2);
-                finish();
-                Toast toast = Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-            else if(BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(intent.getAction())) {
-                Log.e("broadcasereceiver","Now Action?:: " + action);
-            }
-            else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(intent.getAction())) {
-                Log.e("broadcasereceiver","Now Action?:: " + action);
-            }
-            else if (BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED.equals(intent.getAction())) {
-                Log.e("broadcasereceiver","Now Action?:: " + action);
             }
         }
     };

@@ -70,12 +70,9 @@ public class TreatActivity extends AppCompatActivity {
     String part;
     public static Activity treatactivity;
 
-
-
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
     private DatabaseReference underrightdata,underleftdata,cheekleftdata,cheekrightdata;
-
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -128,23 +125,6 @@ public class TreatActivity extends AppCompatActivity {
         u_tleft_txt2=(TextView)findViewById(R.id.u_tleft_txt2); c_tright_txt1=(TextView)findViewById(R.id.c_tright_txt1); c_tright_txt2=(TextView)findViewById(R.id.c_tright_txt2);
         c_tleft_txt1=(TextView)findViewById(R.id.c_tleft_txt1);c_tleft_txt2=(TextView)findViewById(R.id.c_tleft_txt2);
         backbutton=findViewById(R.id.backbutton);
-
-        wrinkle=home.getStringExtra("wrinkle");
-        switch (wrinkle) {
-            case "A+":
-                wrinkleresult = 100; break;
-            case "A":
-                wrinkleresult = 95; break;
-            case "B+":
-                wrinkleresult = 90; break;
-            case "B":
-                wrinkleresult = 85; break;
-            case "C+":
-                wrinkleresult = 80; break;
-            case "C":
-                wrinkleresult = 75; break;
-        }
-        Log.e("wrinkle",String.valueOf(wrinkleresult));
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             Intent intent;
@@ -207,10 +187,25 @@ public class TreatActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        getDataTreat();
+    }
 
-        GetData task = new GetData();
-        task.execute("http://"+HomeActivity.IP_Address+"/callingTreat.php", "");
+    private void getDataTreat() {
+        SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+        Date currentTime = new Date();
+        String date = mSimpleDateFormat.format(currentTime);
 
+        SharedPreferences treat_date = getSharedPreferences("tDate", MODE_PRIVATE);
+        SharedPreferences treat_zone = getSharedPreferences("tZone", MODE_PRIVATE);
+        String tDate = treat_date.getString("tDate", "tDate=none");
+        treatResult = treat_zone.getString("tZone", "tZone=none");
+        Log.e("treat_date", tDate);
+        Log.e("treat_zone", treatResult);
+
+        if (tDate.equals("tDate=none")||!(tDate.equals(date))) {
+            GetData task = new GetData();
+            task.execute("http://"+HomeActivity.IP_Address+"/callingTreathome.php", "");
+        } else if (tDate.equals(date)) checkResult();
     }
 
     class GetData extends AsyncTask<String, Void, String> {
@@ -225,27 +220,7 @@ public class TreatActivity extends AppCompatActivity {
             else if (getResult.contains("No_results")) {}
             else {
                 showResult(getResult);
-
-                // underleft
-                if (treatResult.contains("under_l")) {
-                    underleft.setEnabled(false);
-                    underleft.setImageResource(R.drawable.underleftdone);
-                }
-                // underright
-                if (treatResult.contains("under_r")) {
-                    underright.setEnabled(false);
-                    underright.setImageResource(R.drawable.underrightdone);
-                }
-                // cheekl
-                if (treatResult.contains("cheek_l")) {
-                    cheekl.setEnabled(false);
-                    cheekl.setImageResource(R.drawable.cheekleftdone);
-                }
-                // cheekr
-                if (treatResult.contains("cheek_r")) {
-                    cheekr.setEnabled(false);
-                    cheekr.setImageResource(R.drawable.cheekrightdone);
-                }
+                checkResult();
             }
         }
 
@@ -328,5 +303,27 @@ public class TreatActivity extends AppCompatActivity {
         }
     }
 
+    public void checkResult() {
+        // underleft
+        if (treatResult.contains("under_l")) {
+            underleft.setEnabled(false);
+            underleft.setImageResource(R.drawable.underleftdone);
+        }
+        // underright
+        if (treatResult.contains("under_r")) {
+            underright.setEnabled(false);
+            underright.setImageResource(R.drawable.underrightdone);
+        }
+        // cheekl
+        if (treatResult.contains("cheek_l")) {
+            cheekl.setEnabled(false);
+            cheekl.setImageResource(R.drawable.cheekleftdone);
+        }
+        // cheekr
+        if (treatResult.contains("cheek_r")) {
+            cheekr.setEnabled(false);
+            cheekr.setImageResource(R.drawable.cheekrightdone);
+        }
+    }
 
 }

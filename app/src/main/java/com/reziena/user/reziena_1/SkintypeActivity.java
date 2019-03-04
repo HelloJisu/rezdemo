@@ -170,9 +170,18 @@ public class SkintypeActivity extends AppCompatActivity {
         Log.i("pn: ", String.valueOf(wpn));
         Log.i("wt: ", String.valueOf(wwt));
 
+        setDataSkin();
+
         setData task = new setData();
         task.execute("http://"+HomeActivity.IP_Address+"/saveSkintype.php", skin_type);
 
+    }
+
+    private void setDataSkin() {
+        SharedPreferences spSkin = getSharedPreferences("skin", MODE_PRIVATE);
+        SharedPreferences.Editor editor1 = spSkin.edit();
+        editor1.putString("skin", skin_type);
+        editor1.commit();
     }
 
     class setData extends AsyncTask<String, Void, String> {

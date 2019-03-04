@@ -147,11 +147,110 @@ public class TreatActivity_cheekright extends AppCompatActivity {
   public void onResume() {
     super.onResume();
 
-    GetData task = new GetData();
-    task.execute("http://"+HomeActivity.IP_Address+"/callingTreat.php", "");
+    getDataTreat();
+    getDataWrinkle();
+  }
 
-    GetData2 task2 = new GetData2();
-    task2.execute("http://"+HomeActivity.IP_Address+"/callingWrinkle.php", "");
+  private void getDataWrinkle() {
+    SharedPreferences now_wrinkle = getSharedPreferences("now_w", MODE_PRIVATE);
+    wrinkle_string = now_wrinkle.getString("now_w", "level=none");
+    Log.e("level", wrinkle_string);
+
+    if (wrinkle_string.equals("level=none")) {
+      GetData2 task2 = new GetData2();
+      task2.execute("http://"+HomeActivity.IP_Address+"/callingWrinkle.php", "");
+    } else setResult();
+  }
+
+  private void setResult() {
+    if (wrinkle_string.equals("100")||wrinkle_string.equals("95")) {
+      level = 1;
+    }
+    if (wrinkle_string.equals("90")||wrinkle_string.equals("85")) {
+      level = 2;
+    }
+    if (wrinkle_string.equals("80")||wrinkle_string.equals("75")) {
+      level = 3;
+    }
+    if (level == 1) {
+      // cheekl
+      if (treatResult.contains("cheek_l")) {
+        cheekl.setEnabled(false);
+        cheekl.setImageResource(R.drawable.cheekleftdone);
+      } else {
+        cheekl.setImageResource(R.drawable.cheekleftlevel1);
+      }
+
+      // cheekr
+      if (treatResult.contains("cheek_r")) {
+        cheekr.setEnabled(false);
+        cheekr.setImageResource(R.drawable.cheekrightdone);
+      } else {
+        cheekr.setImageResource(R.drawable.cheekrightlevel1);
+      }
+      component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 1,\nAND SELECT STARTIG AREA");
+    }
+    if (level == 2) {
+      if (treatResult.contains("cheek_l")) {
+        cheekl.setEnabled(false);
+        cheekl.setImageResource(R.drawable.cheekleftdone);
+      } else {
+        cheekl.setImageResource(R.drawable.cheekleftlevel2);
+      }
+
+      // cheekr
+      if (treatResult.contains("cheek_r")) {
+        cheekr.setEnabled(false);
+        cheekr.setImageResource(R.drawable.cheekrightdone);
+      } else {
+        cheekr.setImageResource(R.drawable.cheekrightlevel2);
+      }
+      component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 2,\nAND SELECT STARTIG AREA");
+    } else {
+
+    }
+    if (level == 3) {
+      if (treatResult.contains("cheek_l")) {
+        cheekl.setEnabled(false);
+        cheekl.setImageResource(R.drawable.cheekleftdone);
+      } else {
+        cheekl.setImageResource(R.drawable.cheekleftlevel3);
+      }
+
+      // cheekr
+      if (treatResult.contains("cheek_r")) {
+        cheekr.setEnabled(false);
+        cheekr.setImageResource(R.drawable.cheekrightdone);
+      } else {
+        cheekr.setImageResource(R.drawable.cheekrightlevel3);
+      }
+      component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 3,\nAND SELECT STARTIG AREA");
+    }
+  }
+
+  private void getDataTreat() {
+    SharedPreferences treaat_date = getSharedPreferences("tDate", MODE_PRIVATE);
+    SharedPreferences treat_zone = getSharedPreferences("tZone", MODE_PRIVATE);
+    String tDate = treaat_date.getString("tDate", "tDate=none");
+    treatResult = treat_zone.getString("tZone", "tZone=none");
+    Log.e("treaat_date", tDate);
+    Log.e("treat_zone", treatResult);
+
+    if (tDate.equals("tDate=none")) {
+      GetData task = new GetData();
+      task.execute("http://"+HomeActivity.IP_Address+"/callingTreathome.php", "");
+    } else checkResult();
+  }
+
+  private void setLevel() {
+    SharedPreferences now_wrinkle = getSharedPreferences("now_w", MODE_PRIVATE);
+    wrinkle_string = now_wrinkle.getString("now_w", "level=none");
+    Log.e("level", wrinkle_string);
+
+    SharedPreferences spLevel = getSharedPreferences("level", MODE_PRIVATE);
+    SharedPreferences.Editor editor1 = spLevel.edit();
+    editor1.putString("level", wrinkle_string);
+    editor1.commit();
   }
 
   class GetData extends AsyncTask<String, Void, String> {
@@ -164,20 +263,8 @@ public class TreatActivity_cheekright extends AppCompatActivity {
 
       if (getResult==null) {}
       else {
-        Log.e("treat3-response:", "no result");
         showResult(getResult);
-
-        // cheekl
-        if (treatResult.contains("cheek_l")) {
-          cheekl.setEnabled(false);
-          cheekl.setImageResource(R.drawable.cheekleftdone);
-        }
-
-        // cheekr
-        if (treatResult.contains("cheek_r")) {
-          cheekr.setEnabled(false);
-          cheekr.setImageResource(R.drawable.cheekrightdone);
-        }
+        checkResult();
       }
     }
 
@@ -246,9 +333,8 @@ public class TreatActivity_cheekright extends AppCompatActivity {
         JSONArray jsonArray = jsonObject.getJSONArray("getData");
 
         for(int i=0;i<jsonArray.length();i++){
-
-          JSONObject item = jsonArray.getJSONObject(i);
-          treatResult+=item.getString("value");
+            JSONObject item = jsonArray.getJSONObject(i);
+            treatResult+=item.getString("value");
 
           Log.e("treatResult: ", treatResult+"");
         }
@@ -271,70 +357,8 @@ public class TreatActivity_cheekright extends AppCompatActivity {
       else if (getResult.contains("No_results")) {}
       else {
         showResult(getResult);
-
-        if (wrinkle_string.equals("100")||wrinkle_string.equals("95")) {
-          level = 1;
-        }
-        if (wrinkle_string.equals("90")||wrinkle_string.equals("85")) {
-          level = 2;
-        }
-        if (wrinkle_string.equals("80")||wrinkle_string.equals("75")) {
-          level = 3;
-        }
-          if (level == 1) {
-              // cheekl
-              if (treatResult.contains("cheek_l")) {
-                  cheekl.setEnabled(false);
-                  cheekl.setImageResource(R.drawable.cheekleftdone);
-              } else {
-                  cheekl.setImageResource(R.drawable.cheekleftlevel1);
-              }
-
-              // cheekr
-              if (treatResult.contains("cheek_r")) {
-                  cheekr.setEnabled(false);
-                  cheekr.setImageResource(R.drawable.cheekrightdone);
-              } else {
-                  cheekr.setImageResource(R.drawable.cheekrightlevel1);
-              }
-              component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 1,\nAND SELECT STARTIG AREA");
-          }
-          if (level == 2) {
-              if (treatResult.contains("cheek_l")) {
-                  cheekl.setEnabled(false);
-                  cheekl.setImageResource(R.drawable.cheekleftdone);
-              } else {
-                  cheekl.setImageResource(R.drawable.cheekleftlevel2);
-              }
-
-              // cheekr
-              if (treatResult.contains("cheek_r")) {
-                  cheekr.setEnabled(false);
-                  cheekr.setImageResource(R.drawable.cheekrightdone);
-              } else {
-                  cheekr.setImageResource(R.drawable.cheekrightlevel2);
-              }
-              component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 2,\nAND SELECT STARTIG AREA");
-          } else {
-
-          }
-          if (level == 3) {
-              if (treatResult.contains("cheek_l")) {
-                  cheekl.setEnabled(false);
-                  cheekl.setImageResource(R.drawable.cheekleftdone);
-              } else {
-                  cheekl.setImageResource(R.drawable.cheekleftlevel3);
-              }
-
-              // cheekr
-              if (treatResult.contains("cheek_r")) {
-                  cheekr.setEnabled(false);
-                  cheekr.setImageResource(R.drawable.cheekrightdone);
-              } else {
-                  cheekr.setImageResource(R.drawable.cheekrightlevel3);
-              }
-              component_txt.setText("PLEASE SET THE DEVICE\nON LEVEL 3,\nAND SELECT STARTIG AREA");
-          }
+        //setLevel();
+        setResult();
       }
     }
 
@@ -409,6 +433,20 @@ public class TreatActivity_cheekright extends AppCompatActivity {
         Log.d("wrinkle-JSON", "showResult : ", e);
       }
 
+    }
+  }
+
+  private void checkResult() {
+    // cheekl
+    if (treatResult.contains("cheek_l")) {
+      cheekl.setEnabled(false);
+      cheekl.setImageResource(R.drawable.cheekleftdone);
+    }
+
+    // cheekr
+    if (treatResult.contains("cheek_r")) {
+      cheekr.setEnabled(false);
+      cheekr.setImageResource(R.drawable.cheekrightdone);
     }
   }
 }

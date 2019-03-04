@@ -53,6 +53,9 @@ public class SettingActivity extends AppCompatActivity {
                         SharedPreferences bef_wrinkle = getSharedPreferences("bef_w", MODE_PRIVATE);
                         SharedPreferences now_moisture = getSharedPreferences("now_m", MODE_PRIVATE);
                         SharedPreferences bef_moisture = getSharedPreferences("bef_m", MODE_PRIVATE);
+                        SharedPreferences treat_date = getSharedPreferences("tDate", MODE_PRIVATE);
+                        SharedPreferences treat_zone = getSharedPreferences("tZone", MODE_PRIVATE);
+                        SharedPreferences spSkin = getSharedPreferences("skin", MODE_PRIVATE);
 
                         SharedPreferences.Editor editor1 = sp_userName.edit();
                         SharedPreferences.Editor editor2 = sp_userID.edit();
@@ -60,12 +63,18 @@ public class SettingActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor4 = bef_wrinkle.edit();
                         SharedPreferences.Editor editor5 = now_moisture.edit();
                         SharedPreferences.Editor editor6 = bef_moisture.edit();
+                        SharedPreferences.Editor editor7 = treat_date.edit();
+                        SharedPreferences.Editor editor8 = treat_zone.edit();
+                        SharedPreferences.Editor editor9 = spSkin.edit();
                         editor1.remove("userName");
                         editor2.remove("userID");
                         editor3.remove("now_w");
                         editor4.remove("bef_w");
                         editor5.remove("now_m");
                         editor6.remove("bef_m");
+                        editor7.remove("tDate");
+                        editor8.remove("tZone");
+                        editor9.remove("skin");
 
                         editor1.commit();
                         editor2.commit();
@@ -73,6 +82,9 @@ public class SettingActivity extends AppCompatActivity {
                         editor4.commit();
                         editor5.commit();
                         editor6.commit();
+                        editor7.commit();
+                        editor8.commit();
+                        editor9.commit();
                         Log.e("remove", "yeal~!"); //하기실어
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);

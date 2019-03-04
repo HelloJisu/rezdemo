@@ -43,6 +43,8 @@ import org.opencv.core.Mat;
 
 import java.io.File;
 
+import static com.reziena.user.reziena_1.WrinklesActivity.REQUEST_CAMERA;
+
 public class MainActivity extends AppCompatActivity {
     private TextureView mCameraTextureView;
     private Preview mPreview;
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MAINACTIVITY";
 
-    static final int REQUEST_CAMERA = 1;
+    static final int CAMERA = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.capture:
+                        HomeActivity.send("wrinkle->start");
                         intent = new Intent(getApplicationContext(), WrinkleResultActivity.class);
                         overridePendingTransition(0,0);
                         startActivity(intent);

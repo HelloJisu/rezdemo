@@ -23,6 +23,8 @@ public class BluetoothActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bluetooth);
         bluetoothactivity=BluetoothActivity.this;
 
+        HomeActivity.isFirst = false;
+
         // popupt창 사이즈 지정
 
         WindowManager.LayoutParams lpWindow = new WindowManager.LayoutParams();

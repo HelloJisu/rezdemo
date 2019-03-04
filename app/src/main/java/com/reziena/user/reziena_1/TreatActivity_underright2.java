@@ -72,6 +72,10 @@ public class TreatActivity_underright2 extends AppCompatActivity {
     public static String IP_Address = "52.32.36.182";
     String treat;
 
+    SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy-MM-dd", Locale.KOREA );
+    Date currentTime = new Date();
+    String date = mSimpleDateFormat.format ( currentTime );
+
     public void animation() {
         second = new TimerTask() {
             @Override
@@ -198,9 +202,10 @@ public class TreatActivity_underright2 extends AppCompatActivity {
                                 underrightstring="true";
                         }
                         if(count_ur==15){
+
+                            getDataTreat();
                             GetData task = new GetData();
                             task.execute("http://"+IP_Address+"/callingTreathome.php", "");
-
 
                             Log.e("underright", "save");
 
@@ -224,6 +229,28 @@ public class TreatActivity_underright2 extends AppCompatActivity {
         };
         Timer timer = new Timer();
         timer.schedule(second, 0, 1000);
+    }
+
+    private void getDataTreat() {
+        SharedPreferences treaat_date = getSharedPreferences("tDate", MODE_PRIVATE);
+        SharedPreferences treat_zone = getSharedPreferences("tZone", MODE_PRIVATE);
+        String tDate = treaat_date.getString("tDate", "tDate=none");
+        treat = treat_zone.getString("tZone", "");
+        Log.e("treaat_date", tDate);
+        Log.e("treat_zone", treat);
+
+        setDataTreat();
+    }
+
+    private void setDataTreat() {
+        SharedPreferences treaat_date = getSharedPreferences("tDate", MODE_PRIVATE);
+        SharedPreferences treat_zone = getSharedPreferences("tZone", MODE_PRIVATE);
+        SharedPreferences.Editor editor1 = treaat_date.edit();
+        SharedPreferences.Editor editor2 = treat_zone.edit();
+        editor1.putString("tDate", date);
+        editor2.putString("tZone", treat+"/under_r");
+        editor1.commit();
+        editor2.commit();
     }
 
     class setData extends AsyncTask<String, Void, String> {
@@ -303,18 +330,31 @@ public class TreatActivity_underright2 extends AppCompatActivity {
 
             Log.e("쉬발",getResult);
 
-            SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy-MM-dd", Locale.KOREA );
-            Date currentTime = new Date();
-            String date = mSimpleDateFormat.format ( currentTime );
-            String dates[] = date.split("-");
-
             if (getResult.contains("No_results")) {
                 setData task = new setData();
                 task.execute("http://"+HomeActivity.IP_Address+"/saveTreat.php", "under_r");
+
+                SharedPreferences treaat_date = getSharedPreferences("tDate", MODE_PRIVATE);
+                SharedPreferences treat_zone = getSharedPreferences("tZone", MODE_PRIVATE);
+                SharedPreferences.Editor editor1 = treaat_date.edit();
+                SharedPreferences.Editor editor2 = treat_zone.edit();
+                editor1.putString("tDate", date);
+                editor2.putString("tZone", "under_r");
+                editor1.commit();
+                editor2.commit();
             } else {
                 showResult(getResult);
                 setData task = new setData();
                 task.execute("http://"+HomeActivity.IP_Address+"/updateTreat.php", treat+"/under_r");
+
+                SharedPreferences treaat_date = getSharedPreferences("tDate", MODE_PRIVATE);
+                SharedPreferences treat_zone = getSharedPreferences("tZone", MODE_PRIVATE);
+                SharedPreferences.Editor editor1 = treaat_date.edit();
+                SharedPreferences.Editor editor2 = treat_zone.edit();
+                editor1.putString("tDate", date);
+                editor2.putString("tZone", treat+"/under_r");
+                editor1.commit();
+                editor2.commit();
             }
         }
 

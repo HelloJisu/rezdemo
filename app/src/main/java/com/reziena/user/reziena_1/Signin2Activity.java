@@ -90,7 +90,6 @@ public class Signin2Activity extends AppCompatActivity {
         idstring = subintent.getExtras().getString("id");
         profileurl = subintent.getExtras().getString("profile");
         password = subintent.getExtras().getString("password");
-
         name = findViewById(R.id.name);
         profile = findViewById(R.id.signinprofile);
         signin = findViewById(R.id.signin_signin2);

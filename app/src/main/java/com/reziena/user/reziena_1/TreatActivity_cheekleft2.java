@@ -66,6 +66,10 @@ public class TreatActivity_cheekleft2 extends AppCompatActivity {
     public static String IP_Address = "52.32.36.182";
     String treat;
 
+    SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy-MM-dd", Locale.KOREA );
+    Date currentTime = new Date();
+    String date = mSimpleDateFormat.format ( currentTime );
+
     public void animation() {
         second = new TimerTask() {
             @Override
@@ -265,7 +269,7 @@ public class TreatActivity_cheekleft2 extends AppCompatActivity {
                             cheekleftstring="true";
                         }
                             if(count==23){
-
+                                getDataTreat();
                                 GetData task = new GetData();
                                 task.execute("http://"+IP_Address+"/callingTreathome.php", "");
 
@@ -292,8 +296,20 @@ public class TreatActivity_cheekleft2 extends AppCompatActivity {
         timer.schedule(second, 0, 1000);
     }
 
-    public void onStart() {
-        super.onStart();
+    private void getDataTreat() {
+        SharedPreferences treaat_date = getSharedPreferences("tDate", MODE_PRIVATE);
+        SharedPreferences treat_zone = getSharedPreferences("tZone", MODE_PRIVATE);
+        String tDate = treaat_date.getString("tDate", "tDate=none");
+        treat = treat_zone.getString("tZone", "");
+        Log.e("treaat_date", tDate);
+        Log.e("treat_zone", treat);
+
+        setDataTreat();
+
+        /*if (tDate.equals("tDate=none")||!(tDate.equals(date))) {
+            GetData task = new GetData();
+            task.execute("http://"+IP_Address+"/callingTreathome.php", "");
+        } else if (tDate.equals(date)) setDataTreat();*/
     }
 
     @SuppressLint("WrongViewCast")
@@ -348,6 +364,17 @@ public class TreatActivity_cheekleft2 extends AppCompatActivity {
         super.onResume();
     }
 
+    private void setDataTreat() {
+        SharedPreferences treaat_date = getSharedPreferences("tDate", MODE_PRIVATE);
+        SharedPreferences treat_zone = getSharedPreferences("tZone", MODE_PRIVATE);
+        SharedPreferences.Editor editor1 = treaat_date.edit();
+        SharedPreferences.Editor editor2 = treat_zone.edit();
+        editor1.putString("tDate", date);
+        editor2.putString("tZone", treat+"/cheek_l");
+        editor1.commit();
+        editor2.commit();
+    }
+
     class setData extends AsyncTask<String, Void, String> {
 
         @Override
@@ -360,10 +387,6 @@ public class TreatActivity_cheekleft2 extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String serverURL = params[0];
             String where = params[1];
-
-            SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy-MM-dd", Locale.KOREA );
-            Date currentTime = new Date();
-            String date = mSimpleDateFormat.format ( currentTime );
 
             SharedPreferences sp_userID = getSharedPreferences("userID", MODE_PRIVATE);
             String userID = sp_userID.getString("userID", "");
@@ -425,14 +448,10 @@ public class TreatActivity_cheekleft2 extends AppCompatActivity {
 
             Log.e("쉬발",getResult);
 
-            SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat ( "yyyy-MM-dd", Locale.KOREA );
-            Date currentTime = new Date();
-            String date = mSimpleDateFormat.format ( currentTime );
-            String dates[] = date.split("-");
-
             if (getResult.contains("No_results")) {
                 setData task = new setData();
                 task.execute("http://"+HomeActivity.IP_Address+"/saveTreat.php", "cheek_l");
+
             } else {
                 showResult(getResult);
                 setData task = new setData();

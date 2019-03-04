@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +22,7 @@ import java.util.UUID;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class BluetoothConnectionService {
-    private static final String appName = "Reziena";
+    private static final String appName = "reziena";
 
     String btTag = "BLUETOOTH_CONNECT";
 
@@ -282,7 +283,13 @@ public class BluetoothConnectionService {
                     bytes = mmInStream.read(buffer);
                     Log.e(btTag, "bytes = mmInStream.read(buffer); complete!!!");
                     String incomingMessage = new String(buffer, 0, bytes);
+                    String[] ak = incomingMessage.split("/");
+                    int get = Integer.parseInt(ak[1]);
+                    if (incomingMessage.contains("moisture")) MoistureActivity.moisRand=get;
+                    else if (incomingMessage.contains("wrinkle")) WrinkleResultActivity.wrinkRand=get;
+
                     Log.e(btTag, "InputStream: " + incomingMessage + "real complete!!!!!!!!!!!!!!!!!");
+
                 } catch (IOException e) {
                     Log.e(btTag, "write: Error reading Input Stream. " + e.getMessage());
                     break;

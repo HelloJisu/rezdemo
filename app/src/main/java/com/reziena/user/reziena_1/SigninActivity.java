@@ -234,6 +234,7 @@ public class SigninActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(getApplicationContext(),Signin2Activity.class);
                 intent1.putExtra("id",id);
                 intent1.putExtra("name",name);
+                intent1.putExtra("password",etPassword.getText().toString());
                 intent1.putExtra("profile",profile);
                 startActivity(intent1);
                 finish();
@@ -251,6 +252,7 @@ public class SigninActivity extends AppCompatActivity {
                         Intent intent1 = new Intent(getApplicationContext(),Signin2Activity.class);
                         intent1.putExtra("id",id);
                         intent1.putExtra("name",name);
+                        intent1.putExtra("password",etPassword.getText().toString());
                         intent1.putExtra("profile",profile);
                         startActivity(intent1);
                         finish();
